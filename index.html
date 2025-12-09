@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- Primary Meta Tags -->
+  <title>Dangote Cybersecurity Initiative - Strategic Presentation</title>
+  <meta name="title" content="Dangote Cybersecurity Initiative - Strategic Presentation">
+  <meta name="description" content="Comprehensive interactive presentation on protecting Dangote Petrochemical Refinery and Petroleum Company operations from cyber threats. Evidence-based analysis with £1.9B+ documented incidents.">
+  <meta name="keywords" content="Dangote, cybersecurity, petrochemical, refinery, petroleum, Nigeria, industrial security, OT security">
+  <meta name="author" content="Dangote Group">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Dangote Cybersecurity Initiative">
+  <meta property="og:description" content="Strategic presentation on protecting Nigeria's critical petroleum infrastructure from cyber threats">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="Dangote Cybersecurity Initiative">
+  <meta property="twitter:description" content="Strategic presentation on protecting Nigeria's critical petroleum infrastructure">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ee6c4d' stroke-width='2'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg>">
+  
+  <!-- Scripts -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { overflow: hidden; font-family: system-ui, -apple-system, sans-serif; }
+    #root { width: 100vw; height: 100vh; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+    @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 2000px; } }
+    
+    .animate-in { animation: fadeIn 0.6s ease-out forwards; }
+    .stat-card { transition: all 0.3s ease; }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(238, 108, 77, 0.4); }
+    .interactive-card { cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+    .interactive-card:hover { background: rgba(255, 255, 255, 0.15) !important; }
+    .detail-panel { animation: slideDown 0.3s ease-out; }
+    
+    .slide-content { max-height: calc(100vh - 200px); overflow-y: auto; padding-right: 10px; }
+    .slide-content::-webkit-scrollbar { width: 8px; }
+    .slide-content::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+    .slide-content::-webkit-scrollbar-thumb { background: rgba(238, 108, 77, 0.6); border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    
+    // Icons (same as before)
+    const Shield = ({ size = 24 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>;
+    const AlertTriangle = ({ size = 24 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>;
+    const Target = ({ size = 24 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>;
+    const ChevronRight = ({ size = 24 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"></polyline></svg>;
+    const ChevronLeft = ({ size = 24 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"></polyline></svg>;
+    const ArrowRight = ({ size = 24 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>;
+    const DollarSign = ({ size = 24 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>;
+    const CheckCircle = ({ size = 24 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>;
+
+    function DangotePresentation() {
+      const [slide, setSlide] = useState(0);
+      const [expanded, setExpanded] = useState({});
+      const total = 19;
+
+      useEffect(() => {
+        const handleKey = (e) => {
+          if (e.key === 'ArrowRight' && slide < total - 1) setSlide(slide + 1);
+          if (e.key === 'ArrowLeft' && slide > 0) setSlide(slide - 1);
+        };
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
+      }, [slide]);
+
+      const toggle = (s) => setExpanded(p => ({ ...p, [s]: !p[s] }));
+
+      return (
+        <div style={{ width: '100vw', height: '100vh', background: 'linear-gradient(135deg, #0d3b66 0%, #082540 100%)', display: 'flex', flexDirection: 'column', color: '#fff' }}>
+          <div style={{ padding: '12px 24px', background: 'rgba(0,0,0,0.4)', borderBottom: '2px solid rgba(238,108,77,0.4)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: '14px', fontWeight: '600' }}><Shield size={20} style={{ display: 'inline', marginRight: '8px' }} />Dangote Cybersecurity Initiative</div>
+            <div style={{ fontSize: '13px' }}>Slide {slide + 1} / {total}</div>
+          </div>
+          <div style={{ width: '100%', height: '3px', background: 'rgba(255,255,255,0.1)' }}>
+            <div style={{ width: `${((slide + 1) / total) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #ee6c4d, #16a085)', transition: 'width 0.3s' }} />
+          </div>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', overflow: 'hidden' }}>
+            <div className="slide-content" style={{ maxWidth: '1400px', width: '100%' }}>
+              {[
+                <TitleSlide key={0} />,
+                <ExecutiveSummary key={1} toggle={toggle} ex={expanded} />,
+                <GlobalThreats key={2} toggle={toggle} ex={expanded} />,
+                <JLRCase key={3} toggle={toggle} ex={expanded} />,
+                <ColonialCase key={4} toggle={toggle} ex={expanded} />,
+                <PetroRabighCase key={5} toggle={toggle} ex={expanded} />,
+                <SupplyChain key={6} toggle={toggle} ex={expanded} />,
+                <FinancialImpact key={7} toggle={toggle} ex={expanded} />,
+                <DangoteRisk key={8} toggle={toggle} ex={expanded} />,
+                <ParadigmShift key={9} toggle={toggle} ex={expanded} />,
+                <Solution key={10} toggle={toggle} ex={expanded} />,
+                <Implementation key={11} toggle={toggle} ex={expanded} />,
+                <Phase1 key={12} toggle={toggle} ex={expanded} />,
+                <Phase2 key={13} toggle={toggle} ex={expanded} />,
+                <Budget key={14} toggle={toggle} ex={expanded} />,
+                <ROI key={15} toggle={toggle} ex={expanded} />,
+                <Organization key={16} toggle={toggle} ex={expanded} />,
+                <Leadership key={17} toggle={toggle} ex={expanded} />,
+                <CallToAction key={18} />
+              ][slide]}
+            </div>
+          </div>
+          <div style={{ padding: '16px 24px', background: 'rgba(0,0,0,0.4)', borderTop: '2px solid rgba(238,108,77,0.4)', display: 'flex', justifyContent: 'space-between' }}>
+            <button onClick={() => setSlide(Math.max(0, slide - 1))} disabled={slide === 0} style={{ padding: '10px 20px', background: slide === 0 ? 'rgba(255,255,255,0.1)' : '#ee6c4d', border: 'none', borderRadius: '6px', color: 'white', cursor: slide === 0 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '600' }}>
+              <ChevronLeft size={18} />Previous
+            </button>
+            <div style={{ fontSize: '12px', opacity: 0.7 }}>Use arrow keys to navigate</div>
+            <button onClick={() => setSlide(Math.min(total - 1, slide + 1))} disabled={slide === total - 1} style={{ padding: '10px 20px', background: slide === total - 1 ? 'rgba(255,255,255,0.1)' : '#ee6c4d', border: 'none', borderRadius: '6px', color: 'white', cursor: slide === total - 1 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '600' }}>
+              Next<ChevronRight size={18} />
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // SLIDE COMPONENTS
+
+    function TitleSlide() {
+      return (
+        <div className="animate-in" style={{ textAlign: 'center', padding: '80px 40px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '140px', height: '140px', background: 'linear-gradient(135deg, #ee6c4d, #c94528)', borderRadius: '50%', marginBottom: '40px', animation: 'pulse 3s ease-in-out infinite' }}>
+            <Shield size={70} />
+          </div>
+          <h1 style={{ fontSize: '64px', fontWeight: '700', marginBottom: '20px', lineHeight: '1.1' }}>Protecting Nigeria's<br />Critical Infrastructure</h1>
+          <div style={{ width: '140px', height: '5px', background: 'linear-gradient(90deg, #ee6c4d, #16a085)', margin: '32px auto', borderRadius: '3px' }} />
+          <h2 style={{ fontSize: '36px', fontWeight: '400', opacity: 0.95, marginBottom: '28px' }}>Strategic Cybersecurity Initiative<br />for Dangote Operations</h2>
+          <p style={{ fontSize: '18px', opacity: 0.8 }}>Petrochemical Refinery • Petroleum Company</p>
+          <p style={{ fontSize: '15px', opacity: 0.6, marginTop: '48px' }}>Board of Directors Presentation | December 2025</p>
+        </div>
+      );
+    }
+
+    function ExecutiveSummary({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Executive Summary</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '40px' }}>Critical Insights for Board Decision-Making</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '32px' }}>
+            {[
+              { icon: <AlertTriangle size={32} />, color: '#dc2626', title: 'THE GLOBAL CRISIS', stat: '£1.9B', desc: 'Single incident loss at JLR' },
+              { icon: <Target size={32} />, color: '#ee6c4d', title: 'DANGOTE EXPOSURE', stat: '650K bpd', desc: 'Refinery capacity at risk' },
+              { icon: <Shield size={32} />, color: '#16a085', title: 'THE SOLUTION', stat: '5 Pillars', desc: 'Comprehensive protection' }
+            ].map((item, i) => (
+              <div key={i} className="stat-card" style={{ padding: '28px', background: `${item.color}20`, borderRadius: '12px', border: `2px solid ${item.color}40` }}>
+                <div style={{ color: item.color, marginBottom: '16px' }}>{item.icon}</div>
+                <div style={{ fontSize: '12px', fontWeight: '700', opacity: 0.7, marginBottom: '8px', color: item.color }}>{item.title}</div>
+                <div style={{ fontSize: '40px', fontWeight: '700', marginBottom: '8px', color: item.color }}>{item.stat}</div>
+                <p style={{ fontSize: '14px', opacity: 0.9, fontWeight: '600' }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ padding: '28px', background: 'rgba(13, 59, 102, 0.6)', borderRadius: '12px', border: '2px solid rgba(238, 108, 77, 0.3)', marginBottom: '24px' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '16px', color: '#16a085' }}>Key Recommendations</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', fontSize: '14px', lineHeight: 1.7 }}>
+              <div><CheckCircle size={18} style={{ color: '#16a085', display: 'inline', marginRight: '8px' }} /><strong>Immediate Action:</strong> Board approval for comprehensive initiative</div>
+              <div><CheckCircle size={18} style={{ color: '#16a085', display: 'inline', marginRight: '8px' }} /><strong>Phase 1 (0-3 months):</strong> Assessment, steering committee, MFA, scanning</div>
+              <div><CheckCircle size={18} style={{ color: '#16a085', display: 'inline', marginRight: '8px' }} /><strong>Strategic Investment:</strong> Multi-million dollar 18+ month program</div>
+              <div><CheckCircle size={18} style={{ color: '#16a085', display: 'inline', marginRight: '8px' }} /><strong>Regional Leadership:</strong> Position as African cybersecurity model</div>
+            </div>
+          </div>
+          <div style={{ padding: '24px', background: 'linear-gradient(135deg, #ee6c4d, #c94528)', borderRadius: '12px', textAlign: 'center' }}>
+            <p style={{ fontSize: '17px', lineHeight: 1.6, fontWeight: '600' }}><strong>Critical Decision Point:</strong> Real incidents document losses exceeding $1.9 billion. The question is not whether we can afford cybersecurity, but whether we can afford inadequate protection.</p>
+          </div>
+        </div>
+      );
+    }
+
+    function GlobalThreats({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Global Threat Landscape</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '40px' }}>Industrial Cybersecurity in Crisis: 2021-2024</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
+            {[
+              { label: 'Ransomware Increase (2023)', value: '156%', color: '#dc2626' },
+              { label: 'Average Ransom Demand', value: '$5.3M', color: '#ee6c4d' },
+              { label: 'Industrial Attacks', value: '1,200+', color: '#ee6c4d' },
+              { label: 'Average Downtime', value: '21 Days', color: '#dc2626' }
+            ].map((s, i) => (
+              <div key={i} className="stat-card" style={{ padding: '24px', background: `${s.color}30`, borderRadius: '12px', border: `2px solid ${s.color}50`, textAlign: 'center' }}>
+                <div style={{ fontSize: '36px', fontWeight: '700', color: s.color, marginBottom: '8px' }}>{s.value}</div>
+                <div style={{ fontSize: '13px', opacity: 0.9 }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ padding: '28px', background: 'rgba(13, 59, 102, 0.6)', borderRadius: '12px', border: '2px solid rgba(238, 108, 77, 0.3)' }}>
+            <h3 style={{ fontSize: '22px', fontWeight: '700', marginBottom: '20px', color: '#16a085' }}>Why Industrial Operations Are Explicitly Targeted</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', fontSize: '14px' }}>
+              <div><strong style={{ color: '#ee6c4d', display: 'block', marginBottom: '8px' }}>TIME-SENSITIVE OPERATIONS</strong>Production cannot stay idle. Massive financial losses per hour. Desperation makes victims pay quickly.</div>
+              <div><strong style={{ color: '#ee6c4d', display: 'block', marginBottom: '8px' }}>HIGH-VALUE TARGETS</strong>Daily output worth tens of millions. Strategic importance justifies larger ransoms.</div>
+              <div><strong style={{ color: '#ee6c4d', display: 'block', marginBottom: '8px' }}>LEGACY SYSTEMS</strong>Industrial control systems run older software. Integration with IT creates vulnerabilities.</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function JLRCase({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Jaguar Land Rover: Detailed Case Study</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Britain's Most Expensive Cyber Incident</p>
+          <div style={{ padding: '32px', background: 'linear-gradient(135deg, #dc2626, #991b1b)', borderRadius: '16px', marginBottom: '32px' }}>
+            <div style={{ display: 'flex', gap: '40px', justifyContent: 'space-around', textAlign: 'center' }}>
+              <div><div style={{ fontSize: '72px', fontWeight: '700' }}>£1.9B</div><div style={{ fontSize: '16px' }}>Total Loss</div></div>
+              <div><div style={{ fontSize: '72px', fontWeight: '700' }}>3+</div><div style={{ fontSize: '16px' }}>Months Halt</div></div>
+              <div><div style={{ fontSize: '72px', fontWeight: '700' }}>1000s</div><div style={{ fontSize: '16px' }}>Suppliers Affected</div></div>
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
+            {[
+              { title: 'THE ATTACK', text: 'Single compromised interface cascaded through multiple systems, forcing shutdowns across IT and OT environments' },
+              { title: 'THE IMPACT', text: 'Manufacturing lines idle, dealerships offline, suppliers halted, entire industrial ecosystem frozen' },
+              { title: 'THE LESSON', text: 'No visibility into weak links meant endpoint protection could not prevent cascade failure' }
+            ].map((item, i) => (
+              <div key={i} className="stat-card" style={{ padding: '20px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '10px' }}>
+                <h4 style={{ color: '#ee6c4d', fontSize: '14px', fontWeight: '700', marginBottom: '12px' }}>{item.title}</h4>
+                <p style={{ fontSize: '13px', lineHeight: 1.5, opacity: 0.9 }}>{item.text}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ padding: '20px', background: 'rgba(255, 243, 205, 0.15)', borderRadius: '10px', borderLeft: '4px solid #ff9800' }}>
+            <strong style={{ color: '#ffa726' }}>Critical Insight:</strong> Attack began in shadows where legacy systems and third-party software connected without visibility. JLR had firewalls and detection, but lacked comprehensive visibility into attack surface and interdependencies.
+          </div>
+        </div>
+      );
+    }
+
+    function ColonialCase({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Colonial Pipeline: National Security Crisis</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Single Compromised Password Created National Emergency</p>
+          <div style={{ padding: '32px', background: 'linear-gradient(135deg, #dc2626, #991b1b)', borderRadius: '16px', marginBottom: '24px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '32px', alignItems: 'center' }}>
+              <div>
+                <h2 style={{ fontSize: '22px', fontWeight: '700', marginBottom: '16px' }}>May 2021 Incident</h2>
+                <p style={{ fontSize: '15px', lineHeight: 1.7, marginBottom: '12px' }}>DarkSide ransomware infiltrated through single VPN password without MFA. Company shut down 5,500-mile pipeline delivering 45% of East Coast fuel.</p>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '64px', fontWeight: '700', marginBottom: '8px' }}>6 Days</div>
+                <div style={{ fontSize: '16px', marginBottom: '16px' }}>Shutdown</div>
+                <div style={{ fontSize: '48px', fontWeight: '700' }}>$4.4M</div>
+                <div style={{ fontSize: '16px' }}>Ransom Paid</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+            {[
+              { title: 'Economic Impact', desc: 'Fuel shortages across 17 states, price spikes, panic buying, supply chain disruptions' },
+              { title: 'Political Consequences', desc: 'Presidential emergency declared, FBI investigation, regulatory scrutiny, Congressional hearings' },
+              { title: 'Security Failure', desc: 'VPN without MFA, insufficient segmentation, delayed detection, no monitoring' }
+            ].map((item, i) => (
+              <div key={i} className="stat-card" style={{ padding: '20px', background: 'rgba(238, 108, 77, 0.15)', borderRadius: '10px', border: '2px solid rgba(238, 108, 77, 0.3)' }}>
+                <div style={{ fontSize: '14px', fontWeight: '700', color: '#ee6c4d', marginBottom: '12px' }}>{item.title}</div>
+                <p style={{ fontSize: '13px', lineHeight: 1.6 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function PetroRabighCase({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Petro Rabigh: Nation-State Sabotage</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>When Cyber Attacks Target Human Lives</p>
+          <div style={{ padding: '32px', background: 'linear-gradient(135deg, #7f1d1d, #450a0a)', borderRadius: '16px', border: '3px solid #dc2626', marginBottom: '24px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+              <AlertTriangle size={48} style={{ color: '#fca5a5', marginBottom: '16px' }} />
+              <h2 style={{ fontSize: '28px', fontWeight: '700', marginBottom: '12px', color: '#fca5a5' }}>TRITON MALWARE: August 2017</h2>
+              <p style={{ fontSize: '16px', lineHeight: 1.6 }}>Custom malware targeting safety systems with apparent intent to cause catastrophic explosion</p>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', fontSize: '14px' }}>
+              <div style={{ padding: '16px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px' }}>
+                <strong style={{ display: 'block', marginBottom: '8px', color: '#fca5a5' }}>Attack Sophistication:</strong>
+                Attackers spent ~1 year mapping networks, understanding processes, developing custom malware to disable safety systems
+              </div>
+              <div style={{ padding: '16px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px' }}>
+                <strong style={{ display: 'block', marginBottom: '8px', color: '#fca5a5' }}>Failure Mode:</strong>
+                Coding error caused failsafe shutdown rather than sabotage. Error literally saved hundreds of lives
+              </div>
+            </div>
+          </div>
+          <div style={{ padding: '24px', background: 'rgba(22, 160, 133, 0.15)', borderRadius: '12px', borderLeft: '4px solid #16a085' }}>
+            <h4 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '12px', color: '#16a085' }}>Dangote Relevance</h4>
+            <p style={{ fontSize: '14px', lineHeight: 1.7 }}>Our refinery uses similar safety instrumented systems. We cannot assume immunity from such targeting. Regional geopolitical landscape evolving. Strategic importance could make us attractive target for actors pursuing objectives beyond financial gain.</p>
+          </div>
+        </div>
+      );
+    }
+
+    function SupplyChain({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Supply Chain Vulnerability</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Attack Surface Extends Beyond Our Walls</p>
+          <div style={{ padding: '28px', background: 'linear-gradient(135deg, #ee6c4d, #c94528)', borderRadius: '12px', marginBottom: '32px', textAlign: 'center' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '12px' }}>July 2021: Software Vendor Compromise</h2>
+            <p style={{ fontSize: '15px', lineHeight: 1.6 }}>Business software company infected with HelloKitty ransomware. $30M ransom demanded. Secondary infections spread to multiple cooperative clients.</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+            <div style={{ padding: '24px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '12px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', color: '#16a085' }}>Extended Ecosystem</h3>
+              <div style={{ fontSize: '13px', lineHeight: 1.8 }}>
+                {['International suppliers with system access', 'Logistics integrated with inventory', 'Contractors with remote access', 'Software vendors providing updates', 'Engineering firms with designs', 'Customer ordering systems'].map((i, idx) => <div key={idx} style={{ marginBottom: '8px' }}>• {i}</div>)}
+              </div>
+            </div>
+            <div style={{ padding: '24px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '12px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', color: '#ee6c4d' }}>Attack Pathways</h3>
+              {['Known vulnerabilities in unpatched systems', 'Shared network exploitation', 'Managed service provider compromise'].map((p, idx) => (
+                <div key={idx} style={{ padding: '14px', background: 'rgba(238, 108, 77, 0.15)', borderRadius: '8px', borderLeft: '3px solid #ee6c4d', marginBottom: '12px', fontSize: '13px' }}>
+                  <strong style={{ display: 'block', marginBottom: '6px' }}>{['Vulnerabilities:', 'Shared Networks:', 'Service Providers:'][idx]}</strong>{p}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function FinancialImpact({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Cost of Inaction</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Real Numbers from Real Incidents</p>
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '32px' }}>
+            {[
+              { company: 'Jaguar Land Rover', amount: '£1.9B', detail: 'Total losses' },
+              { company: 'Colonial Pipeline', amount: '$4.4M', detail: 'Ransom paid' },
+              { company: 'Saudi Aramco', amount: '5 Months', detail: 'Paper systems' }
+            ].map((c, i) => (
+              <div key={i} className="stat-card" style={{ flex: 1, padding: '28px', background: 'linear-gradient(135deg, #dc2626, #991b1b)', borderRadius: '12px', textAlign: 'center' }}>
+                <div style={{ fontSize: '56px', fontWeight: '700', marginBottom: '8px' }}>{c.amount}</div>
+                <div style={{ fontSize: '14px', marginBottom: '4px' }}>{c.company}</div>
+                <div style={{ fontSize: '12px', opacity: 0.7 }}>{c.detail}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ padding: '28px', background: 'rgba(13, 59, 102, 0.6)', borderRadius: '12px', border: '2px solid rgba(238, 108, 77, 0.3)' }}>
+            <h2 style={{ fontSize: '22px', fontWeight: '700', marginBottom: '20px', color: '#16a085' }}>Dangote One-Week Shutdown Scenario</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', fontSize: '14px' }}>
+              <div><strong style={{ color: '#16a085', display: 'block', marginBottom: '8px' }}>DIRECT REVENUE LOSS</strong>Hundreds of millions (650,000 bpd × margins × 7 days)</div>
+              <div><strong style={{ color: '#16a085', display: 'block', marginBottom: '8px' }}>NATIONAL IMPACT</strong>Emergency imports, FX pressure, potential shortages, transportation disruption</div>
+              <div><strong style={{ color: '#16a085', display: 'block', marginBottom: '8px' }}>REPUTATION DAMAGE</strong>Loss of stakeholder confidence, years to repair trust</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function DangoteRisk({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Dangote Vulnerability Assessment</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Why We Face Elevated Cyber Risk</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px', marginBottom: '24px' }}>
+            {[
+              { title: 'Strategic National Asset', color: '#dc2626', points: ['650,000 bpd refinery', 'Transform fuel imports', 'National energy security', 'Flagship infrastructure'] },
+              { title: 'Continental Food Security', color: '#ee6c4d', points: ['Support millions of farmers', 'Multi-country supply chains', 'Regional food production', 'Seasonal vulnerabilities'] }
+            ].map((item, i) => (
+              <div key={i} style={{ padding: '24px', background: `${item.color}20`, borderRadius: '12px', border: `2px solid ${item.color}40` }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', color: item.color }}>{item.title}</h3>
+                <div style={{ fontSize: '13px', lineHeight: 1.8 }}>
+                  {item.points.map((p, idx) => <div key={idx} style={{ marginBottom: '8px' }}>• {p}</div>)}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ padding: '24px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '12px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', color: '#16a085' }}>Multiple Threat Actors</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', fontSize: '13px' }}>
+              {['Cybercriminals: High-value target with resources to pay ransoms', 'Nation-States: Strategic infrastructure for espionage or destabilization', 'Activists: Asymmetric impact for political statements'].map((t, i) => (
+                <div key={i} style={{ padding: '16px', background: 'rgba(238, 108, 77, 0.12)', borderRadius: '8px', borderTop: '3px solid #ee6c4d' }}>{t}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function ParadigmShift({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>From Defense to Visibility</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Fundamental Shift in Cybersecurity Paradigm</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '32px' }}>
+            <div style={{ padding: '28px', background: 'rgba(220, 38, 38, 0.2)', borderRadius: '12px', borderLeft: '6px solid #dc2626' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '16px', color: '#ef4444' }}>✗ Traditional: Build Walls</h2>
+              <div style={{ fontSize: '14px', lineHeight: 2 }}>
+                <div>✗ More firewalls, endpoint protection</div>
+                <div>✗ Focus on perimeter defense</div>
+                <div>✗ React after attacks occur</div>
+              </div>
+              <div style={{ marginTop: '16px', padding: '16px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', fontSize: '13px', fontWeight: '600', color: '#fca5a5' }}>
+                JLR and others had these. They still failed.
+              </div>
+            </div>
+            <div style={{ padding: '28px', background: 'rgba(22, 160, 133, 0.2)', borderRadius: '12px', borderLeft: '6px solid #16a085' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '16px', color: '#34d399' }}>✓ Modern: See Everything</h2>
+              <div style={{ fontSize: '14px', lineHeight: 2 }}>
+                <div>✓ Know every connected system</div>
+                <div>✓ Map all attack pathways</div>
+                <div>✓ Identify vulnerabilities first</div>
+              </div>
+              <div style={{ marginTop: '16px', padding: '16px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', fontSize: '13px', fontWeight: '600', color: '#6ee7b7' }}>
+                Exposure management as continuous discipline
+              </div>
+            </div>
+          </div>
+          <div style={{ padding: '24px', background: 'linear-gradient(135deg, #16a085, #129177)', borderRadius: '12px', textAlign: 'center' }}>
+            <p style={{ fontSize: '16px', lineHeight: 1.6, fontWeight: '700' }}>Visibility is the new currency of resilience. You cannot defend what you cannot see.</p>
+          </div>
+        </div>
+      );
+    }
+
+    function Solution({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Comprehensive Solution Framework</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Five Integrated Pillars for Complete Protection</p>
+          {[
+            { n: '1', title: 'Asset Visibility & Risk Mapping', color: '#0d3b66', desc: 'Complete inventory, dependency mapping, attack surface documentation' },
+            { n: '2', title: 'Exposure Management', color: '#ee6c4d', desc: 'Continuous scanning, business impact prioritization, clear remediation timelines' },
+            { n: '3', title: 'Supply Chain Security', color: '#ee6c4d', desc: 'Minimum requirements, supplier assessments, partner support, contractual protections' },
+            { n: '4', title: 'Organizational Capability', color: '#16a085', desc: 'Training, cross-functional teams, simulation exercises, security culture' },
+            { n: '5', title: 'Board Governance', color: '#16a085', desc: 'Regular reporting, clear metrics, strategic integration, regulatory engagement' }
+          ].map((p, i) => (
+            <div key={i} className="stat-card" style={{ padding: '20px', background: `${p.color}20`, borderRadius: '10px', borderLeft: `5px solid ${p.color}`, marginBottom: '16px', display: 'flex', gap: '16px', alignItems: 'start' }}>
+              <div style={{ width: '48px', height: '48px', background: p.color, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: '700', flexShrink: 0 }}>{p.n}</div>
+              <div style={{ flex: 1 }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px' }}>PILLAR {p.n}: {p.title}</h3>
+                <p style={{ fontSize: '13px', lineHeight: 1.6 }}>{p.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    function Implementation({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Implementation Roadmap</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Phased Approach Balancing Urgency with Operations</p>
+          {[
+            { phase: 'PHASE 1', dur: '0-3 Months', title: 'IMMEDIATE ACTIONS', color: '#dc2626', actions: ['Security assessment', 'Steering committee', 'MFA implementation', 'Rapid vulnerability scan'] },
+            { phase: 'PHASE 2', dur: '3-9 Months', title: 'FOUNDATION', color: '#ee6c4d', actions: ['Monitoring systems', 'Asset inventory', 'Network segmentation', '24/7 SOC'] },
+            { phase: 'PHASE 3', dur: '9-18 Months', title: 'CAPABILITY', color: '#16a085', actions: ['Exposure management', 'Supply chain security', 'Threat hunting', 'Penetration testing'] },
+            { phase: 'PHASE 4', dur: '18+ Months', title: 'IMPROVEMENT', color: '#0d3b66', actions: ['Maturity enhancement', 'Regional leadership', 'Knowledge sharing', 'Continuous adaptation'] }
+          ].map((p, i) => (
+            <div key={i} className="stat-card" style={{ padding: '24px', background: `linear-gradient(135deg, ${p.color}, ${p.color}dd)`, borderRadius: '12px', marginBottom: '16px' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '8px' }}>{p.phase} ({p.dur})</h2>
+              <h3 style={{ fontSize: '15px', fontWeight: '700', marginBottom: '12px', opacity: 0.9 }}>{p.title}</h3>
+              <div style={{ fontSize: '13px', lineHeight: 1.8 }}>
+                {p.actions.map((a, idx) => <div key={idx}>• {a}</div>)}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    function Phase1({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Phase 1 Details (0-3 Months)</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Immediate Critical Actions & Quick Wins</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+            {[
+              { title: 'Security Assessment', detail: 'Engage specialized consultants for comprehensive OT/IT security assessment. Identify critical vulnerabilities. Map current state.' },
+              { title: 'Steering Committee', detail: 'Establish cross-functional committee with executive sponsor. IT, OT, operations, finance, legal representation. Weekly meetings.' },
+              { title: 'MFA Implementation', detail: 'Deploy multi-factor authentication across all remote access points. VPN, administrative access, critical systems. Immediate protection.' },
+              { title: 'Vulnerability Scanning', detail: 'Conduct rapid vulnerability assessment of critical systems. Prioritize by business impact. Begin immediate remediation of critical exposures.' }
+            ].map((item, i) => (
+              <div key={i} className="stat-card" style={{ padding: '24px', background: 'rgba(238, 108, 77, 0.15)', borderRadius: '12px', border: '2px solid rgba(238, 108, 77, 0.3)' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '12px', color: '#ee6c4d' }}>{item.title}</h3>
+                <p style={{ fontSize: '14px', lineHeight: 1.6 }}>{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function Phase2({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Phase 2 Details (3-9 Months)</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Building Infrastructure Foundation</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+            {[
+              { title: 'Monitoring Systems', detail: 'Deploy comprehensive monitoring covering IT and OT environments. Real-time visibility into security events. Integrated logging and analysis.' },
+              { title: 'Asset Inventory', detail: 'Complete discovery and documentation of all systems. Map interdependencies and data flows. Living inventory that updates continuously.' },
+              { title: 'Network Segmentation', detail: 'Implement proper IT/OT segmentation. Control traffic between zones. Limit lateral movement pathways. Industrial security zones.' },
+              { title: '24/7 SOC Capability', detail: 'Establish security operations center with continuous monitoring. Incident response procedures. Threat intelligence integration. Escalation protocols.' }
+            ].map((item, i) => (
+              <div key={i} className="stat-card" style={{ padding: '24px', background: 'rgba(22, 160, 133, 0.15)', borderRadius: '12px', border: '2px solid rgba(22, 160, 133, 0.3)' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '12px', color: '#16a085' }}>{item.title}</h3>
+                <p style={{ fontSize: '14px', lineHeight: 1.6 }}>{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function Budget({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Budget & Investment</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Multi-Year Investment Justification</p>
+          <div style={{ padding: '32px', background: 'rgba(13, 59, 102, 0.6)', borderRadius: '16px', border: '2px solid rgba(238, 108, 77, 0.3)', marginBottom: '32px' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '20px', textAlign: 'center' }}>Investment Categories</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+              {[
+                { cat: 'Technology', detail: 'Monitoring, detection, segmentation, OT security tools' },
+                { cat: 'Personnel', detail: 'Security team, SOC analysts, training programs' },
+                { cat: 'Consulting', detail: 'Assessments, architecture, implementation support' },
+                { cat: 'Operations', detail: 'Ongoing maintenance, threat intelligence, updates' }
+              ].map((item, i) => (
+                <div key={i} style={{ padding: '20px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '10px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#16a085', marginBottom: '12px' }}>{item.cat}</div>
+                  <p style={{ fontSize: '13px', lineHeight: 1.5 }}>{item.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            <div style={{ padding: '24px', background: 'rgba(22, 160, 133, 0.2)', borderRadius: '12px', borderLeft: '5px solid #16a085' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '12px', color: '#34d399' }}>Proactive Investment</h3>
+              <p style={{ marginBottom: '12px' }}>Technology, personnel, training, monitoring</p>
+              <div style={{ fontSize: '36px', fontWeight: '700', color: '#34d399' }}>Millions</div>
+              <div style={{ fontSize: '13px', opacity: 0.9 }}>Over multiple years</div>
+            </div>
+            <div style={{ padding: '24px', background: 'rgba(220, 38, 38, 0.2)', borderRadius: '12px', borderLeft: '5px solid #dc2626' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '12px', color: '#f87171' }}>Reactive Incident</h3>
+              <p style={{ marginBottom: '12px' }}>Lost production, ransoms, recovery, reputation</p>
+              <div style={{ fontSize: '36px', fontWeight: '700', color: '#f87171' }}>Hundreds of Millions</div>
+              <div style={{ fontSize: '13px', opacity: 0.9 }}>Single week-long incident</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function ROI({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>ROI Analysis</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Return Beyond Risk Mitigation</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+            {[
+              { title: 'Operational Excellence', desc: 'Safer deployment of digital technologies. Optimize energy, reduce waste, enhance quality.' },
+              { title: 'Competitive Advantage', desc: 'Strengthens position with international partners requiring security evidence.' },
+              { title: 'Brand Protection', desc: 'Protects reputation and stakeholder confidence built over decades.' },
+              { title: 'Regulatory Readiness', desc: 'Positions ahead of evolving requirements rather than reactive compliance.' }
+            ].map((item, i) => (
+              <div key={i} className="stat-card" style={{ padding: '20px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '10px' }}>
+                <strong style={{ color: '#16a085', display: 'block', marginBottom: '8px', fontSize: '15px' }}>{item.title}</strong>
+                <p style={{ fontSize: '13px', lineHeight: 1.6 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: '32px', padding: '24px', background: 'linear-gradient(135deg, #ee6c4d, #c94528)', borderRadius: '12px', textAlign: 'center' }}>
+            <p style={{ fontSize: '18px', lineHeight: 1.6, fontWeight: '700' }}>JLR's £1.9B loss far exceeds preventive measures over many years. ROI is not just avoiding losses—it's enabling growth.</p>
+          </div>
+        </div>
+      );
+    }
+
+    function Organization({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Organizational Change Management</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Culture, Training, and Capability Building</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '24px' }}>
+            {[
+              { title: 'Security Culture', points: ['Everyone\'s responsibility', 'Awareness training', 'Reporting encouragement', 'Recognition programs'] },
+              { title: 'Cross-Functional Teams', points: ['Bridge IT/OT divide', 'Shared accountability', 'Regular collaboration', 'Unified objectives'] },
+              { title: 'Executive Attention', points: ['Sustained commitment', 'Resource allocation', 'Clear priorities', 'Board oversight'] }
+            ].map((item, i) => (
+              <div key={i} className="stat-card" style={{ padding: '24px', background: 'rgba(22, 160, 133, 0.15)', borderRadius: '12px', border: '2px solid rgba(22, 160, 133, 0.3)' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '16px', color: '#16a085' }}>{item.title}</h3>
+                <div style={{ fontSize: '13px', lineHeight: 1.8 }}>
+                  {item.points.map((p, idx) => <div key={idx} style={{ marginBottom: '8px' }}>• {p}</div>)}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ padding: '24px', background: 'rgba(255, 243, 205, 0.15)', borderRadius: '12px', borderLeft: '4px solid #ff9800' }}>
+            <p style={{ fontSize: '14px', lineHeight: 1.7, color: '#ffa726' }}>
+              <strong>Critical Success Factor:</strong> Cultural shift where security becomes everyone's responsibility. Not just IT department problem. Operations staff understand role. Finance understands investment. Legal understands risk. Executive leadership provides sustained attention and resources.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    function Leadership({ toggle, ex }) {
+      return (
+        <div className="animate-in" style={{ padding: '40px' }}>
+          <h1 style={{ fontSize: '52px', fontWeight: '700', marginBottom: '16px' }}>Regional Leadership Vision</h1>
+          <p style={{ fontSize: '18px', opacity: 0.8, marginBottom: '32px' }}>Positioning as African Industrial Cybersecurity Model</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px', marginBottom: '24px' }}>
+            {[
+              { title: 'Set Standards', desc: 'Develop best practices adapted to African context and operational realities' },
+              { title: 'Share Knowledge', desc: 'Engage partners and agencies to raise regional cybersecurity posture' },
+              { title: 'Demonstrate Leadership', desc: 'Position as model for critical infrastructure, influence policy' },
+              { title: 'Build Capacity', desc: 'Develop local cybersecurity talent benefiting broader African sector' }
+            ].map((item, i) => (
+              <div key={i} className="stat-card" style={{ padding: '24px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '12px', borderLeft: '5px solid #16a085' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px', color: '#16a085' }}>{item.title}</h3>
+                <p style={{ fontSize: '14px', lineHeight: 1.6 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ padding: '24px', background: 'linear-gradient(135deg, #16a085, #129177)', borderRadius: '12px' }}>
+            <p style={{ fontSize: '16px', lineHeight: 1.7, fontWeight: '600', textAlign: 'center' }}>
+              By engaging with government, sharing approach, and serving as model, we help shape Nigeria's cybersecurity framework in practical ways for industrial operations while meeting legitimate security concerns. Regional leadership creates strategic advantage and fulfills responsibility to broader African industrial ecosystem.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    function CallToAction() {
+      return (
+        <div className="animate-in" style={{ textAlign: 'center', padding: '80px 40px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '140px', height: '140px', background: 'linear-gradient(135deg, #16a085, #129177)', borderRadius: '50%', marginBottom: '40px' }}>
+            <Shield size={70} />
+          </div>
+          <h1 style={{ fontSize: '64px', fontWeight: '700', marginBottom: '32px', lineHeight: 1.2 }}>The Time to Act Is Now</h1>
+          <div style={{ width: '140px', height: '5px', background: 'linear-gradient(90deg, #ee6c4d, #16a085)', margin: '32px auto', borderRadius: '3px' }} />
+          <p style={{ fontSize: '24px', lineHeight: 1.6, marginBottom: '48px', maxWidth: '1000px', margin: '0 auto 48px' }}>
+            We have the opportunity to learn from others' painful experiences<br />rather than repeat them
+          </p>
+          <div style={{ padding: '40px', background: 'rgba(255, 255, 255, 0.12)', borderRadius: '16px', marginBottom: '48px', maxWidth: '1000px', margin: '0 auto 48px' }}>
+            <p style={{ fontSize: '19px', lineHeight: 1.8 }}>
+              Organizations that thrive won't just have better firewalls. They'll have comprehensive visibility, proactive exposure management, organizational capability spanning IT and OT, and board governance treating cybersecurity as strategic imperative.
+            </p>
+          </div>
+          <div style={{ padding: '32px', background: 'linear-gradient(135deg, #ee6c4d, #c94528)', borderRadius: '16px', maxWidth: '900px', margin: '0 auto 48px' }}>
+            <p style={{ fontSize: '22px', fontWeight: '700', marginBottom: '20px' }}>The question is not whether we can afford this investment.</p>
+            <p style={{ fontSize: '28px', fontWeight: '700' }}>The question is whether we can afford NOT to invest.</p>
+          </div>
+          <div style={{ padding: '32px', background: 'rgba(22, 160, 133, 0.2)', borderRadius: '16px', borderLeft: '5px solid #16a085', maxWidth: '900px', margin: '0 auto', textAlign: 'left' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '20px', color: '#34d399' }}>Immediate Next Steps:</h3>
+            {[
+              'Establish cross-functional steering committee with executive sponsor',
+              'Engage specialized consultants for comprehensive assessment',
+              'Develop detailed implementation roadmap with phased milestones',
+              'Initiate Phase 1: MFA, vulnerability scanning, rapid assessment',
+              'Establish regular board reporting on cybersecurity posture'
+            ].map((step, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px', fontSize: '16px' }}>
+                <div style={{ width: '32px', height: '32px', background: '#16a085', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', flexShrink: 0 }}>{i + 1}</div>
+                <div>{step}</div>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '16px', opacity: 0.7, marginTop: '64px' }}>Thank you. Questions welcome.</p>
+        </div>
+      );
+    }
+
+    // Render
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<DangotePresentation />);
+  </script>
+</body>
+</html>
